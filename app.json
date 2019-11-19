@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "expo test",
-    "slug": "expo-test",
+    "name": "locker",
+    "slug": "locker",
     "privacy": "public",
     "sdkVersion": "35.0.0",
     "platforms": [
