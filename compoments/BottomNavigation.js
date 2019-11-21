@@ -1,15 +1,10 @@
 import * as React from 'react';
-import {BottomNavigation, Text} from 'react-native-paper';
-
-
-// const StorageRoute = () => <Text>Storage</Text>;
-import Icon from 'react-native-vector-icons/Ionicons';
+import {BottomNavigation} from 'react-native-paper';
 import StorageStackNavigator from "../StorageStackNavigator";
+import MyStackNavigator from "../MyStackNavigator";
 
-const MyRoute = () => <Text>Albums</Text>;
 
-
-export default class MyComponent extends React.Component {
+export default class BottomCompoment extends React.Component {
     state = {
         index: 0,
         routes: [
@@ -22,7 +17,7 @@ export default class MyComponent extends React.Component {
 
     _renderScene = BottomNavigation.SceneMap({
         storage: StorageStackNavigator,
-        my: MyRoute,
+        my: MyStackNavigator,
     });
 
     render() {

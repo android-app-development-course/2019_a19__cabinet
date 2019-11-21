@@ -1,17 +1,14 @@
+import * as React from "react";
 import {createAppContainer} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
 
-import StorageRoute from './compoments/StorageCompoment'
-import AddCat from "./compoments/AddCat";
-import * as React from "react";
-
+import MyCompomnet from "./compoments/MyCompomnet";
 
 
 const StorageStackNavigator = createStackNavigator({
-    storage: StorageRoute,
-    addcat: AddCat
+    my: MyCompomnet,
 }, {
-    initialRouteName: 'storage',
+    initialRouteName: 'my',
     headerMode: 'none',
 });
 
