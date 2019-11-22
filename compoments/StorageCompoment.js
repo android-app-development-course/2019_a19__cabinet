@@ -6,6 +6,8 @@ import chunk from "../utils/chunck";
 import ActionButton from "react-native-action-button";
 import Icon from 'react-native-vector-icons/Ionicons';
 import {getAllCat, deleteCat} from "../storage/sqlite";
+import * as ImagePicker from 'expo-image-picker';
+
 
 
 const no_roud_conner = StyleSheet.create({
@@ -50,7 +52,7 @@ const actionButtonIconStyle = StyleSheet.create({
 const strings = {
     DeleteCat: 'Delete category',
     confirm: 'Confirm',
-}
+};
 
 export default function (props) {
     const debugArray = [];
@@ -65,9 +67,20 @@ export default function (props) {
     const [dialogVisble, setDialogVisble] = useState(false);
     const [readyDel, setReadyDel] = useState({});
 
-    const handleCameraClick = getAllCat().then(res => {
-        console.log(res)
-    });
+    const handleCameraClick = async () => {
+        let result = await ImagePicker.launchCameraAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [16, 9],
+            quality: 1
+        });
+
+        // console.log(result);
+
+        if (!result.cancelled) {
+            props.navigation.navigate('addthing', {image: result})
+        }
+    };
 
     const delCat = () => {
         deleteCat(readyDel.id);
@@ -127,7 +140,7 @@ export default function (props) {
                 <View style={{height: 150, flex: 1}}/>
             </ScrollView>
             <ActionButton offsetY={30} buttonColor="rgba(231,76,60,1)">
-                <ActionButton.Item onPress={() => handleCameraClick}>
+                <ActionButton.Item onPress={() => handleCameraClick()}>
                     <Icon name="md-camera" style={actionButtonIconStyle.item}/>
                 </ActionButton.Item>
                 <ActionButton.Item onPress={() => props.navigation.navigate('addcat')}>
