@@ -1,7 +1,9 @@
 import {useState} from 'react';
 import * as React from 'react';
-import {List, Button, TextInput, Divider} from 'react-native-paper';
-import {StyleSheet, View, Image, Text, Dimensions} from 'react-native';
+import {List, Button, TextInput, Divider, Dialog, Paragraph, Portal} from 'react-native-paper';
+import {StyleSheet, View, Image, Text, Dimensions, Platform, ToastAndroid, BackHandler} from 'react-native';
+import {Dropdown} from 'react-native-material-dropdown-v2';
+import {getAllCat, insertThing} from "../storage/sqlite";
 
 const styles = StyleSheet.create({
     divider: {
@@ -20,31 +22,74 @@ const strings = {
     remarkPlaceHolder: 'Input the remark of thing',
     confirm: 'Confirm',
     goBack: 'Go Back',
+    chooseCat: 'Choose the catergry',
+    insertErr: 'DataBase insert error',
 };
 
 export default function AddThing(props) {
     const {image} = props.navigation.state.params;
     if (!image) props.navigation.goBack();
-    console.log(image)
     const winWidth = Math.floor(Dimensions.get('window').width);
     const winHeight = Math.floor(Dimensions.get('window').height);
     const imgHeight = Math.floor((winWidth / image.width) * image.height);
-    // const uri = "file:///data/user/0/host.exp.exponent/cache/ExperienceData/%2540anonymous%252Flocker-8f9a55b4-f9f7-4178-9f0e-795f30e0c5c5/ImagePicker/403845e3-184b-4fc0-a923-d21f058c7cec.jpg";
-    // console.log(uri)
 
     const [thingName, setThingName] = useState('');
     const [remark, setRemark] = useState('');
+    const [catergries, setCatergries] = useState([]);
+    const [selectedCatId, setSelectedCatId] = useState(-1);
+    const [dialogVisibe, setDialogVisible] = useState(false);
 
     const handleConfirm = () => {
-
+        insertThing(thingName, image, selectedCatId, remark).then(res => {
+            console.log(`INSERT ${thingName}, ${image}, ${selectedCatId}, ${remark}`);
+            props.navigation.goBack();
+        }).catch(err => {
+            if (Platform.OS == 'android') {
+                ToastAndroid.show(strings.insertErr, ToastAndroid.SHORT);
+            }
+        });
     };
+
+    getAllCat().then(res => {
+        const data = res.rows._array.map(item => {
+            item.value = item.cat_name;
+            return item;
+        });
+        setCatergries(data);
+    });
 
     return (
         <View>
+            <Portal>
+                <Dialog
+                    visible={dialogVisibe}
+                    onDismiss={() => setDialogVisible(false)}>
+                    <Dialog.Content>
+                        {catergries.map((item, idx) => (
+                            <View key={item.cat_id}>
+                                <Button
+                                    onPress={() => {
+                                        setSelectedCatId(item.cat_id);
+                                        setDialogVisible(false);
+                                    }}
+                                >{item.cat_name}</Button>
+                                {(idx !== catergries.length) && <Divider/>}
+                            </View>
+                        ))}
+                    </Dialog.Content>
+                </Dialog>
+            </Portal>
             <Image source={{uri: image.uri}} style={{width: winWidth, height: imgHeight}}/>
             <View style={{minHeight: winHeight - imgHeight - 245, justifyContent: 'space-between'}}>
                 <View>
                     <Divider/>
+                    <Button
+                        contentStyle={{height: 60}}
+                        onPress={() => setDialogVisible(true)}
+                    >{selectedCatId === -1 ?
+                        strings.chooseCat :
+                        catergries[catergries.findIndex((item) => (item.cat_id === selectedCatId))].cat_name
+                    }</Button>
                     <TextInput
                         label={strings.name}
                         value={thingName}
@@ -65,7 +110,7 @@ export default function AddThing(props) {
                     </Button>
                     <Button mode='contained' style={[styles.button]} title={strings.goBack}
                             onPress={handleConfirm}
-                            disabled={thingName === '' /*|| catname.length <= 0 */}>
+                            disabled={thingName === '' || selectedCatId === -1}>
                         {strings.confirm}
                     </Button>
                 </View>

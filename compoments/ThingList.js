@@ -2,12 +2,9 @@ import {useState, useEffect} from 'react';
 import * as React from 'react';
 import {List, Divider} from 'react-native-paper';
 import {
-    StyleSheet,
     FlatList,
     View,
-    TouchableWithoutFeedback,
     Dimensions,
-    Text,
 } from 'react-native';
 
 export default function ThingList(props) {

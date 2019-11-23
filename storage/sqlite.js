@@ -70,4 +70,15 @@ export const deleteCat = async (id) => {
     })
 };
 
+export const insertThing = (thingName, image, selectedCatId, remark) => {
+    return new Promise((resolve, reject) => {
+        db.transaction(function (tx) {
+            tx.executeSql(`INSERT INTO things (thing_cat, thing_name, thing_photo, thing_remark) VALUES (?,?,?,?)`,
+                [selectedCatId, thingName, image.uri, remark]);
+        }, (err) => {
+            reject(err)
+        }, () => resolve());
+    })
+};
+
 export const db = SQLite.openDatabase(dbName);
