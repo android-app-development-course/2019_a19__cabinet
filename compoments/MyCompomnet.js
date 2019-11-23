@@ -31,7 +31,7 @@ const strings = {
 
 };
 
-export default function ThingList(props) {
+export default function MyCompomnet(props) {
     const [dialogVisibe, setDialogVisibe] = useState(false);
     const [dialogTitle, setdialogTitle] = useState('');
     const [dialogContent, setDialogContent] = useState('');
