@@ -81,4 +81,17 @@ export const insertThing = (thingName, image, selectedCatId, remark) => {
     })
 };
 
+export const getThingByCat = (cat_id) => {
+    return new Promise((resolve, reject) => {
+        db.transaction(function (tx) {
+            tx.executeSql(`SELECT * FROM things WHERE thing_cat = ?`, [cat_id], function (tx, res) {
+                resolve(res);
+            })
+        }, (err) => {
+            reject(err)
+        })
+    });
+};
+
+
 export const db = SQLite.openDatabase(dbName);

@@ -126,7 +126,7 @@ export default function (props) {
                                                                   setReadyDel(item);
                                                                   setDialogVisble(true);
                                                               }}
-                                                              onPress={() => console.log(item.text)}>
+                                                              onPress={() => props.navigation.navigate('thinglist', {cat_id: item.id})}>
                                         <Button icon={item.icon}
                                                 mode="contained"
                                                 contentStyle={[buttonStyle]}

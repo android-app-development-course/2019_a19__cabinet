@@ -5,6 +5,7 @@ import * as React from "react";
 import StorageRoute from './compoments/StorageCompoment'
 import AddCat from "./compoments/AddCat";
 import AddThing from "./compoments/AddThing";
+import ThingList from "./compoments/ThingList";
 
 
 
@@ -12,6 +13,7 @@ const StorageStackNavigator = createStackNavigator({
     storage: StorageRoute,
     addcat: AddCat,
     addthing: AddThing,
+    thinglist: ThingList,
 }, {
     initialRouteName: 'storage',
     headerMode: 'none',
