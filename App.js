@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {Provider as PaperProvider, Button, Appbar} from 'react-native-paper';
 import { StyleSheet, Text, View } from 'react-native';
@@ -8,7 +9,11 @@ import AppNavigator from './StorageStackNavigator'
 export default class App extends React.Component {
     constructor(props) {
         super(props);
-        // initDB();
+        initDB(function (err) {
+            console.log(err);
+        }, function () {
+            console.log('success init db');
+        });
     }
 
     render() {
@@ -28,10 +33,10 @@ export default class App extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+    container: {
+        flex: 1,
+        backgroundColor: '#fff',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
 });

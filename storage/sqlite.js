@@ -31,12 +31,67 @@ primary key autoincrement,
 create unique index catergries_cat_id_uindex
 on catergries (cat_id);`;
 
-export const initDB = (cb) => {
+export const initDB = (errCb, successCb) => {
     const db = SQLite.openDatabase(dbName, dbVersion);
     db.transaction(function (tx) {
         tx.executeSql(createThing);
         tx.executeSql(createCat);
-    }, cb);
+    }, errCb, successCb);
 };
+
+export const insert_cat = (name, icon, errCb, successCb) => {
+    db.transaction(function (tx) {
+        tx.executeSql(`INSERT INTO catergries (cat_name, cat_icon) VALUES (?, ?)`, [name, icon]);
+    }, errCb, successCb);
+};
+
+export const getAllCat = async () => {
+    return new Promise((resolve, reject) => {
+        db.transaction(function (tx) {
+            tx.executeSql(`SELECT * FROM catergries`, [], function (tx, res) {
+                resolve(res);
+            })
+        }, function (err) {
+            reject(err);
+        })
+    })
+
+};
+
+export const deleteCat = async (id) => {
+    return new Promise((resolve, reject) => {
+        db.transaction(function (tx) {
+            tx.executeSql(`DELETE FROM catergries WHERE cat_id = ?`, [id], function (tx, res) {
+                resolve(res);
+            })
+        }, function (err) {
+            reject(err);
+        })
+    })
+};
+
+export const insertThing = (thingName, image, selectedCatId, remark) => {
+    return new Promise((resolve, reject) => {
+        db.transaction(function (tx) {
+            tx.executeSql(`INSERT INTO things (thing_cat, thing_name, thing_photo, thing_remark) VALUES (?,?,?,?)`,
+                [selectedCatId, thingName, image.uri, remark]);
+        }, (err) => {
+            reject(err)
+        }, () => resolve());
+    })
+};
+
+export const getThingByCat = (cat_id) => {
+    return new Promise((resolve, reject) => {
+        db.transaction(function (tx) {
+            tx.executeSql(`SELECT * FROM things WHERE thing_cat = ?`, [cat_id], function (tx, res) {
+                resolve(res);
+            })
+        }, (err) => {
+            reject(err)
+        })
+    });
+};
+
 
 export const db = SQLite.openDatabase(dbName);

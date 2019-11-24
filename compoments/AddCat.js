@@ -2,9 +2,10 @@ import {Component, useState} from 'react';
 import * as React from 'react';
 import {Text, Appbar, Button, TextInput, Divider} from 'react-native-paper';
 import {ScrollView, StyleSheet, View, Dimensions, TouchableOpacity} from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import chunck from "../utils/chunck";
 import Constants from 'expo-constants';
+import {getAllCat, insert_cat, deleteCat} from "../storage/sqlite";
 
 const styles = StyleSheet.create({
     divider: {
@@ -34,36 +35,36 @@ const iconStyles = StyleSheet.create({
         width: buttonWidth,
         height: buttonHeight,
     }
-})
+});
 
-const icons = ['md-appstore', 'md-airplane', 'md-beer', 'md-bicycle', 'md-calendar', 'md-cafe', 'md-construct',
-    'md-flash', 'md-headset', 'md-paw', 'md-medkit', 'md-paper-plane', 'md-print', 'md-rocket', 'md-rose',
-    'md-school', 'md-trash', 'md-trophy', 'md-wallet', 'md-walk', 'md-umbrella'
-]
+const icons = ['store', 'airplane', 'beer', 'bike', 'calendar', 'coffee', 'hammer',
+    'flashlight', 'headset', 'paw', 'medical-bag', 'compass', 'printer', 'rocket', 'flower-tulip',
+    'school', 'trash-can', 'trophy', 'wallet', 'walk', 'umbrella'
+];
 
 const strings = {
     InputCatNamePlaceHolder: "Input cat name",
     inputCatNameLabel: "CatName",
     goBack: 'Go back',
-    confirm: 'Confirm'
-}
+    confirm: 'Confirm',
+};
 
 export default function AddCat(props) {
     const [selected, setSelected] = useState('');
     const [catname, setCatName] = useState('');
     const selectedColor = (props.theme && props.theme.primary) || '#6200ee';
 
-    const handleSelectedChange = (e) => {
-        setSelected(e);
+    const handleConfirm = () => {
+        insert_cat(catname, selected, function (err) {
+            console.log(err)
+        }, function () {
+            console.log('succss');
+        });
+        props.navigation.goBack();
     };
 
-    const handleConfirm = () => {
-
-        props.navigation.goBack();
-    }
-
     return (
-        <ScrollView>
+        <View>
             <ScrollView style={{height: buttonHeight * 4}}>
                 {
                     chunck(icons, 3).map((row, rowNum) => (
@@ -104,6 +105,6 @@ export default function AddCat(props) {
                 </Button>
             </View>
             <View style={{height: Constants.statusBarHeight * 2}}/>
-        </ScrollView>
+        </View>
     )
 }

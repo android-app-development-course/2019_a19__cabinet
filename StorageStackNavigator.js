@@ -1,18 +1,19 @@
 import {createAppContainer} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
-import {createMaterialBottomTabNavigator} from "react-navigation-material-bottom-tabs";
+import * as React from "react";
 
 import StorageRoute from './compoments/StorageCompoment'
 import AddCat from "./compoments/AddCat";
-import {Text} from "react-native-paper";
-import * as React from "react";
+import AddThing from "./compoments/AddThing";
+import ThingList from "./compoments/ThingList";
 
-const MyRoute = () => <Text>Albums</Text>;
 
 
 const StorageStackNavigator = createStackNavigator({
     storage: StorageRoute,
-    addcat: AddCat
+    addcat: AddCat,
+    addthing: AddThing,
+    thinglist: ThingList,
 }, {
     initialRouteName: 'storage',
     headerMode: 'none',
