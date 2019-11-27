@@ -78,11 +78,11 @@ export default function MyCompomnet(props) {
             <List.Subheader>{strings.about}</List.Subheader>
             <List.Item
                 title={strings.version}
+                description={version}
                 left={() => <List.Icon color="#000" icon="git"/>}
             />
             <List.Item
                 title={strings.author}
-                description={version}
                 left={() => <List.Icon color="#000" icon="account-supervisor"/>}
                 onPress={() => handlePressAuthor()}
             />
