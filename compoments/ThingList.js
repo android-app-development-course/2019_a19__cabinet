@@ -23,6 +23,7 @@ export default function ThingList(props) {
     }
 
     const [thingList, setThingList] = useState(debugArray);
+
     getThingByCat(cat_id).then(res => {
         const data = res.rows._array.map(item => {
             return {
@@ -32,6 +33,7 @@ export default function ThingList(props) {
         });
         setThingList(data)
     });
+
     return (
         <View>
             {thingList &&

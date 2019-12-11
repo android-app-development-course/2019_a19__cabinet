@@ -93,5 +93,18 @@ export const getThingByCat = (cat_id) => {
     });
 };
 
+//查找图片
+export const getPhotoById = (thing_id) => {
+    return new Promise(((resolve, reject) => {
+        db.transaction(function (tx) {
+            tx.executeSql(`SELECT * FROM things WHERE thing_id = ?`,[thing_id],function (tx,res) {
+                resolve(res);
+            })
+        },(err)=>{
+            reject(err)
+        })
+    }))
+};
+
 
 export const db = SQLite.openDatabase(dbName);
