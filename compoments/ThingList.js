@@ -41,7 +41,9 @@ export default function ThingList(props) {
                 data={thingList}
                 renderItem={({item}) => (
                     <View key={item.id}>
-                        <List.Item title={item.text} onPress={() => console.log(item.text)}/>
+                        <List.Item title={item.text} onPress={
+                            () => props.navigation.navigate('thingdetails', {thing_id: item.id})//传递参数
+                        }/>
                         <Divider/>
                     </View>
                 )}

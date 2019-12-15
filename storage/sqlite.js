@@ -118,4 +118,15 @@ export const deleteThing = async (id) => {
     })
 };
 
+export const updateThing = (name, remark, id) => {
+    return new Promise(((resolve, reject) => {
+        db.transaction(function (tx) {
+            tx.executeSql(`UPDATE things SET thing_name = ? thing_remark = ? where thing_id =?`,[name, remark, id], function (tx, res) {
+                resolve(res);
+            })
+        },function (err) {
+            reject(err);
+        })
+    }))
+}
 export const db = SQLite.openDatabase(dbName);
