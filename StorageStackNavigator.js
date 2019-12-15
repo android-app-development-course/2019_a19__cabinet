@@ -6,6 +6,7 @@ import StorageRoute from './compoments/StorageCompoment'
 import AddCat from "./compoments/AddCat";
 import AddThing from "./compoments/AddThing";
 import ThingList from "./compoments/ThingList";
+import showdetails from "./compoments/showdetails";
 
 
 
@@ -14,6 +15,7 @@ const StorageStackNavigator = createStackNavigator({
     addcat: AddCat,
     addthing: AddThing,
     thinglist: ThingList,
+    thingdetails: showdetails,
 }, {
     initialRouteName: 'storage',
     headerMode: 'none',

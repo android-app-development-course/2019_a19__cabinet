@@ -1,47 +1,60 @@
 import * as React from 'react'
+import {useState} from 'react'
 import {Image, StyleSheet, View, Dimensions} from 'react-native';
-import {Button} from "react-native-paper";
-import {getPhotoById} from "../storage/sqlite";
+import {Button,Dialog} from "react-native-paper";
+import {getPhotoById,deleteThing} from "../storage/sqlite";
 import Text from "react-native-web/dist/exports/Text";
 
 export default function showdetails(props) {
+    const debugArray = [];
     const winWidth = Dimensions.get('window').width;
     const winHeight = Dimensions.get('window').height;
 
     const {thing_id} = props.navigation.state.params;
-    const {thingList,setThingList} = useState('')
+    const {thingList,setThingList} = useState('');
+    const [readyDel, setReadyDel] = useState({});
+    const [catergries, setCatergries] = useState([]);
+    const [dialogVisible, setDialogVisible] = useState(false);
 
     getPhotoById(thing_id).then(res => {
-        const data = res.rows._array.map(item => {
+        const data = res.row.array.map(item => {
             return {
-                text: item.thing_name,
-                id: item.thing_id,
+                name: item.thing_name,
                 photo:item.thing_photo,
                 remark:item.thing_remark,
             }
         });
-        setThingList(data)
+        setCatergries(data)
     });
 
     const handleDelete = ()=>{
-
+        deleteThing(readyDel.id);
+        const idx = catergries.indexOf(readyDel);
+        idx >= 0 && catergries.splice(idx, 1);
+        setDialogVisble(false);
     };
+
+    const handleChange = ()=>{
+
+    }
 
     return(
         <View style={styles.container}>
-            <Image style={styles.ImageStyle} source={item.photo}/>
-            <Text style={styles.TextStyle}>{item.name}</Text>
-            <Text style={styles.TextStyle}>{item.remark}</Text>
+            <Image style={styles.ImageStyle} source={catergries.photo}/>
+            <Text style={styles.TextStyle}>{catergries.name}</Text>
+            <Text style={styles.TextStyle}>{catergries.remark}</Text>
+            <Dialog visible={dialogVisible}
+                    onDismiss={() => setDialogVisible(false)}>
 
+            </Dialog>
             <View>
-                <Button mode='contained' style={[styles.button]} title={strings.change} color={'#666'}
-                        onPress={() => props.navigation.goBack()}>
+                <Button mode='contained' style={[styles.button]} title={strings.change}
+                        onPress={() => handleChange}>
                     {strings.change}
                 </Button>
 
                 <Button mode='contained' style={[styles.button]} title={strings.delete}
-                        onPress={handleConfirm}
-                        disabled={selected === '' || catname.length <= 0}>
+                        onPress={() => handleDelete}>
                     {strings.delete}
                 </Button>
             </View>

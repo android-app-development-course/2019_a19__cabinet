@@ -106,5 +106,16 @@ export const getPhotoById = (thing_id) => {
     }))
 };
 
+export const deleteThing = async (id) => {
+    return new Promise((resolve, reject) => {
+        db.transaction(function (tx) {
+            tx.executeSql(`DELETE FROM things WHERE thing_id = ?`, [id], function (tx, res) {
+                resolve(res);
+            })
+        }, function (err) {
+            reject(err);
+        })
+    })
+};
 
 export const db = SQLite.openDatabase(dbName);
