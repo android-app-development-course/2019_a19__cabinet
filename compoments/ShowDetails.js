@@ -1,6 +1,6 @@
 import * as React from 'react'
 import {useState} from 'react'
-import {Image, StyleSheet, View, Dimensions, Platform, ToastAndroid} from 'react-native';
+import {Image, StyleSheet, View, Dimensions} from 'react-native';
 import {Button, Text} from "react-native-paper";
 import {getPhotoById,deleteThing} from "../storage/sqlite";
 
@@ -30,18 +30,26 @@ export default function ShowDetails(props) {
     const styles = StyleSheet.create({
         container:{
             flex:1,
-            justifyContent:'center',
+            // justifyContent:'center'
             alignItems:'center'
         },
         ImageStyle:{
-            width:winWidth - 30,
-            height:winHeight / 2
+            width:winWidth - 10,
+            height:winHeight / 3
         },
         button: {
+            marginTop:20,
+            width:winWidth - 10,
             color: 'black'
         },
         TextStyle:{
+            marginLeft:20,
+            fontSize:25,
             color: 'blue'
+        },
+        Content:{
+            width:winWidth,
+            marginTop: 20
         }
     });
 
@@ -56,8 +64,10 @@ export default function ShowDetails(props) {
     return(
         <View style={styles.container}>
             <Image style={styles.ImageStyle} source={{uri: thingObj.photo}}/>
-            <Text>{thingObj.name}</Text>
-            <Text>{thingObj.remark}</Text>
+            <View style={styles.Content}>
+                <Text style={styles.TextStyle}>{'Name：'+thingObj.name}</Text>
+                <Text style={styles.TextStyle}>{'Remark：'+thingObj.remark}</Text>
+            </View>
             <Button mode='contained' style={[styles.button]} title={strings.delete}
                     onPress={() => {handleDelete();props.navigation.goBack();}}>
                 {strings.delete}
